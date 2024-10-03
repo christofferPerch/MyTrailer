@@ -1,0 +1,28 @@
+﻿@model List<MyTrailer.Models.Trailer>
+
+<h2>Available Trailers at @ViewBag.LocationName</h2>
+
+@if (!Model.Any())
+{
+    <p>No trailers are available at this location right now.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Trailer Number</th>
+                <th>Availability</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var trailer in Model)
+            {
+                <tr>
+                    <td>@trailer.Number</td>
+                    <td>@(trailer.IsAvailable ? "Available" : "Not Available")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

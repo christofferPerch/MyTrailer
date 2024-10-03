@@ -17,20 +17,20 @@ namespace MyTrailer.Services
 
         public async Task<Customer?> GetCustomerById(int id)
         {
-            var sql = @"SELECT * FROM Customers WHERE Id = @Id";
+            var sql = @"SELECT * FROM Customer WHERE Id = @Id";
             var parameters = new { Id = id };
             return await _dataAccess.GetById<Customer>(sql, parameters);
         }
 
         public async Task<List<Customer>> GetAllCustomers()
         {
-            var sql = @"SELECT * FROM Customers";
+            var sql = @"SELECT * FROM Customer";
             return await _dataAccess.GetAll<Customer>(sql);
         }
 
         public async Task<int> AddCustomer(Customer customer)
         {
-            var sql = @"INSERT INTO Customers (Name, Email, PhoneNumber)
+            var sql = @"INSERT INTO Customer (Name, Email, PhoneNumber)
                         OUTPUT INSERTED.Id
                         VALUES (@Name, @Email, @PhoneNumber)";
 
@@ -46,7 +46,7 @@ namespace MyTrailer.Services
 
         public async Task UpdateCustomer(Customer customer)
         {
-            var sql = @"UPDATE Customers
+            var sql = @"UPDATE Customer
                         SET Name = @Name, Email = @Email, PhoneNumber = @PhoneNumber
                         WHERE Id = @Id";
 
@@ -63,7 +63,7 @@ namespace MyTrailer.Services
 
         public async Task DeleteCustomer(int id)
         {
-            var sql = @"DELETE FROM Customers WHERE Id = @Id";
+            var sql = @"DELETE FROM Customer WHERE Id = @Id";
             var parameters = new { Id = id };
             await _dataAccess.Delete(sql, parameters);
         }

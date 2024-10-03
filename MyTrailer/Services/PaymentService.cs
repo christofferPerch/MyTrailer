@@ -17,20 +17,20 @@ namespace MyTrailer.Services
 
         public async Task<Payment?> GetPaymentById(int id)
         {
-            var sql = @"SELECT * FROM Payments WHERE Id = @Id";
+            var sql = @"SELECT * FROM Payment WHERE Id = @Id";
             var parameters = new { Id = id };
             return await _dataAccess.GetById<Payment>(sql, parameters);
         }
 
         public async Task<List<Payment>> GetAllPayments()
         {
-            var sql = @"SELECT * FROM Payments";
+            var sql = @"SELECT * FROM Payment";
             return await _dataAccess.GetAll<Payment>(sql);
         }
 
         public async Task<int> AddPayment(Payment payment)
         {
-            var sql = @"INSERT INTO Payments (CustomerId, Method, History)
+            var sql = @"INSERT INTO Payment (CustomerId, Method, History)
                         OUTPUT INSERTED.Id
                         VALUES (@CustomerId, @Method, @History)";
 
@@ -46,7 +46,7 @@ namespace MyTrailer.Services
 
         public async Task UpdatePayment(Payment payment)
         {
-            var sql = @"UPDATE Payments
+            var sql = @"UPDATE Payment
                         SET CustomerId = @CustomerId, Method = @Method, History = @History
                         WHERE Id = @Id";
 
@@ -63,7 +63,7 @@ namespace MyTrailer.Services
 
         public async Task DeletePayment(int id)
         {
-            var sql = @"DELETE FROM Payments WHERE Id = @Id";
+            var sql = @"DELETE FROM Payment WHERE Id = @Id";
             var parameters = new { Id = id };
             await _dataAccess.Delete(sql, parameters);
         }

@@ -2,6 +2,7 @@ using DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyTrailer.Data;
+using MyTrailer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,16 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IDataAccess, DataAccess.DataAccess>(sp =>
                new DataAccess.DataAccess(connectionString));
+
+builder.Services.AddScoped<BookingService>();
+
+builder.Services.AddScoped<CustomerService>();
+
+builder.Services.AddScoped<PaymentService>();
+
+builder.Services.AddScoped<TrailerService>();
+
+builder.Services.AddScoped<LocationService>();
 
 var app = builder.Build();
 

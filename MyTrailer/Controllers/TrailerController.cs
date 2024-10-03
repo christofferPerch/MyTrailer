@@ -25,7 +25,7 @@ namespace MyTrailer.Controllers
         public async Task<IActionResult> Index(int locationId)
         {
             var trailers = await _trailerService.GetAvailableTrailersByLocation(locationId);
-            ViewBag.LocationName = await _locationService.GetLocationName(locationId); // Add location name to display
+            ViewBag.LocationName = await _locationService.GetLocationName(locationId); 
             return View(trailers);
         }
     }

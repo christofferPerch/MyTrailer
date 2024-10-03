@@ -1,4 +1,38 @@
 ﻿<h2>Booking Confirmed</h2>
 
-<p>Your booking has been confirmed. Your booking ID is @ViewBag.BookingId.</p>
+@if (TempData["Message"] != null) {
+    <p>@TempData["Message"]</p>
+}
+
+<p>Your booking has been successfully confirmed. Here are the details:</p>
+
+<table class="table">
+    <tr>
+        <th>Trailer Number</th>
+        <td>@ViewBag.TrailerNumber</td>
+    </tr>
+    <tr>
+        <th>Start Date and Time</th>
+        <td>@ViewBag.StartDateTime</td>
+    </tr>
+    <tr>
+        <th>End Date and Time</th>
+        <td>@ViewBag.EndDateTime</td>
+    </tr>
+    <tr>
+        <th>Is Insured?</th>
+        <td>@(ViewBag.IsInsured ? "Yes" : "No")</td>
+    </tr>
+    @if (ViewBag.IsOverNight) {
+        <tr>
+            <th>Overnight Booking</th>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <th>Overnight Fee</th>
+            <td>@ViewBag.OverNightFee.ToString("C")</td>
+        </tr>
+    }
+</table>
+
 <a href="@Url.Action("Index", "Trailer")" class="btn btn-primary">Back to Trailers</a>

@@ -22,11 +22,14 @@ namespace MyTrailer.Controllers
 
         [HttpPost]
         public async Task<IActionResult> ConfirmBooking(int trailerId, int customerId, DateTime startDateTime, DateTime endDateTime, bool isInsured) {
-            // Get the trailer details
             var trailer = await _trailerService.GetTrailerById(trailerId);
             if (trailer == null || !trailer.IsAvailable) {
                 return BadRequest("Trailer is not available.");
             }
+
+            // Check if the booking is overnight (spans more than one day)
+            bool isOverNight = startDateTime.Date != endDateTime.Date;
+            decimal overNightFee = isOverNight ? 500m : 0m;  // Example overnight fee
 
             // Create a booking
             var booking = new Booking {
@@ -35,7 +38,9 @@ namespace MyTrailer.Controllers
                 StartDateTime = startDateTime,
                 EndDateTime = endDateTime,
                 IsInsured = isInsured,
-                IsOverdue = false
+                IsOverdue = false,
+                IsOverNight = isOverNight,
+                OverNightFee = overNightFee
             };
 
             // Add the booking to the database
@@ -44,6 +49,11 @@ namespace MyTrailer.Controllers
             // Mark the trailer as unavailable
             trailer.IsAvailable = false;
             await _trailerService.UpdateTrailer(trailer);
+
+            // Notify the customer about the overnight booking
+            if (isOverNight) {
+                TempData["Message"] = "Overnight booking confirmed with an additional fee of " + overNightFee.ToString("C");
+            }
 
             return RedirectToAction("BookingConfirmed", new { bookingId });
         }
@@ -66,9 +76,20 @@ namespace MyTrailer.Controllers
             return View(viewModel); // Make sure ConfirmBooking.cshtml exists in Trailer folder
         }
         public IActionResult BookingConfirmed(int bookingId) {
+            var booking = _bookingService.GetBookingById(bookingId).Result;  // Fetch the booking details
+            var trailer = _trailerService.GetTrailerById(booking.TrailerId).Result;
+
             ViewBag.BookingId = bookingId;
+            ViewBag.TrailerNumber = trailer.Number;
+            ViewBag.StartDateTime = booking.StartDateTime;
+            ViewBag.EndDateTime = booking.EndDateTime;
+            ViewBag.IsInsured = booking.IsInsured;
+            ViewBag.IsOverNight = booking.IsOverNight;
+            ViewBag.OverNightFee = booking.OverNightFee;
+
             return View();
         }
+
         public async Task<IActionResult> SelectLocation()
         {
             var locations = await _locationService.GetAllLocations();

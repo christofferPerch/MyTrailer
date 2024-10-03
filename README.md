@@ -1,14 +1,8 @@
-# MyTrailer Project
+# MyTrailer Documentation
 
-## Overview
+## Domain
 
-MyTrailer is an online trailer rental system that allows customers to:
-- Browse and book trailers for short-term and long-term rentals.
-- Purchase insurance for trailer rentals.
-- Receive notifications for late returns and any applicable fees.
-- Book trailers for overnight use via the website.
-
-## Entities
+### Entities
 
 - **Trailer**
   - `Id`: Trailer identifier.
@@ -18,16 +12,16 @@ MyTrailer is an online trailer rental system that allows customers to:
 
 - **Location**
   - `Id`: Location identifier.
-  - `LocationName`: Name of the location.
+  - `LocationName`: Name of the location (e.g., "Jem og Fix").
   - `Address`: Physical address of the location.
-  - `PartnerCompany`: The company associated with the location.
+  - `PartnerCompany`: The company that is associated with the location (for branding and other business agreements).
 
 - **Customer**
   - `Id`: Customer identifier.
   - `Name`: Full name of the customer.
-  - `Email`: Customer’s email for notifications.
+  - `Email`: Customer’s email for notifications and communication.
   - `PhoneNumber`: Customer’s phone number.
-  - `Payments`: Collection of payment records.
+  - `Payments`: Collection of payment records for the customer.
 
 - **Booking**
   - `Id`: Booking identifier.
@@ -37,43 +31,83 @@ MyTrailer is an online trailer rental system that allows customers to:
   - `EndDateTime`: End date and time of the booking.
   - `IsInsured`: Boolean indicating whether insurance was purchased.
   - `IsOverdue`: Boolean indicating if the trailer was returned late.
-  - **New Fields**:
-    - `IsOverNight`: Boolean indicating if the booking is overnight.
-    - `OverNightFee`: The fee for overnight rentals.
 
-## Features
+## Value Objects
 
-### 1. View Available Trailers at a Selected Location
-- As a customer, you can view all available trailers at your selected location.
+- **PaymentDetails**
+  - `PaymentMethod`: Describes the method of payment used (e.g., "Credit Card").
+  - `PaymentHistory`: Stores past payment transactions as a list.
+  - **Behavior**: Tracks payment history and processes customer payments.
 
-### 2. Book a Trailer for Short-Term Rental
-- Book a trailer for a short-term rental and the system will mark it as unavailable during the booking period.
+- **Insurance**
+  - `BookingId`: The booking associated with this insurance.
+  - `Fee`: Fixed fee for the insurance (50 Kr).
+  - `CoveragePeriod`: The period for which the insurance is valid (e.g., 24 hours).
+  - **Behavior**: Tracks insurance status and calculates coverage.
 
-### 3. Purchase Insurance for Trailer
-- You can add insurance to your trailer booking for a fee of 50 Kr.
+## Aggregates
 
-### 4. Charge a Late Return Fee
-- If a trailer is returned late, an excess rental fee is applied to the customer’s account automatically.
+- **Customer Aggregate**:
+  - Attributes: Contains Customer, Booking, and Payments.
+  - **Behavior**: Allows a customer to manage their bookings, payments, and insurance purchases.
 
-### 5. **Book Long-Term Rentals for Overnight Use**
-- Customers attempting to book an overnight rental are allowed to complete the booking via the website.
-- **New Fields**: Overnight bookings are detected and an `OverNightFee` is applied.
-  
-  #### Logic:
-  - A booking that spans past midnight is flagged as `IsOverNight: true`.
-  - An additional `OverNightFee` is applied based on the business logic.
+- **Location Aggregate**:
+  - Attributes: Contains Location and its associated Trailers.
+  - **Behavior**: Manages the available trailers for a location, and checks availability based on bookings.
 
-### 6. Track Trailer Usage and Late Returns
-- The system tracks trailer usage and automatically calculates any applicable late fees upon return.
+- **Trailer Aggregate**:
+  - Attributes: Contains Trailer and its Bookings.
+  - **Behavior**: Tracks trailer availability and manages bookings.
 
-### 7. Display Branding on Trailers
-- Partner companies can have their branding displayed on the trailers located at their stores.
+![Trailer Rental System](./TrailerDiagram.png)
 
-## Database Schema Changes
+## User Stories
 
-The following fields have been added to the **Booking** table to support long-term and overnight bookings:
+### User Story 1: View Available Trailers at a Selected Location
 
-```sql
-ALTER TABLE Booking
-ADD IsOverNight BIT NOT NULL DEFAULT 0,
-    OverNightFee DECIMAL(18, 2) NOT NULL DEFAULT 0.00;
+- **As a customer**, I want to view available trailers at my selected location, so that I can choose one for rental.
+- **Given** the customer has opened the trailer booking page in the app,
+- **When** they select a location,
+- **Then** the system should display all available trailers for that location.
+
+### User Story 2: Book a Trailer for Short-Term Rental
+
+- **As a customer**, I want to book a trailer for short-term rental, so that I can move my items.
+- **Given** a customer has selected a trailer and a valid time slot,
+- **When** they confirm the booking,
+- **Then** the system should register the booking and mark the trailer as unavailable for the chosen period.
+
+### User Story 3: Purchase Insurance for the Trailer
+
+- **As a customer**, I want to purchase insurance when booking a trailer, so that I am covered in case of damage.
+- **Given** a customer is booking a trailer,
+- **When** they are prompted to add insurance,
+- **Then** the system should allow them to add insurance for a fee of 50 Kr.
+
+### User Story 4: Charge a Late Return Fee
+
+- **As a customer**, I want to receive a late return fee if I return the trailer after the scheduled time, so that I know the extra cost.
+- **Given** a customer has returned a trailer after the booking's end time,
+- **When** the system processes the return,
+- **Then** it should apply an excess rental fee to the customer’s account.
+
+### User Story 5: Book Long-Term Rentals via Website
+
+- **As a customer**, I want to book long-term rentals for overnight use via the website, so that I can use the trailer overnight.
+- **Given** a customer is trying to book an overnight rental,
+- **When** they attempt to do this via the app,
+- **Then** the system should direct them to the website to complete the booking.
+
+### User Story 6: Display Branding on Trailers
+
+- **As a location partner**, I want to have my branding displayed on trailers, so that customers can recognize my store.
+- **Given** a trailer is located at a partner’s site,
+- **When** a customer views the trailer details in the app,
+- **Then** the system should display the partner’s branding along with MyTrailer branding.
+
+### User Story 7: Track Trailer Usage and Late Returns
+
+- **As a system administrator**, I want to track trailer usage and late returns, so that I can ensure trailers are available and customers are charged correctly.
+- **Given** a trailer has been rented out,
+- **When** the trailer is returned,
+- **Then** the system should log the return time and calculate any late fees if applicable.

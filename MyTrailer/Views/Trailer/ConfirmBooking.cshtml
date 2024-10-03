@@ -1,0 +1,25 @@
+﻿@model MyTrailer.ViewModels.BookingViewModel
+
+<h2>Confirm Booking</h2>
+
+<form asp-action="ConfirmBooking" method="post">
+    <input type="hidden" name="trailerId" value="@Model.TrailerId" />
+    <input type="hidden" name="customerId" value="@Model.CustomerId" />
+
+    <div class="form-group">
+        <label for="startDateTime">Start Date and Time:</label>
+        <input type="datetime-local" id="startDateTime" name="startDateTime" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="endDateTime">End Date and Time:</label>
+        <input type="datetime-local" id="endDateTime" name="endDateTime" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label for="isInsured">Insurance (50 Kr):</label>
+        <input type="checkbox" id="isInsured" name="isInsured" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+</form>

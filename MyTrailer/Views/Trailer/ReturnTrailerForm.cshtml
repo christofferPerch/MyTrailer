@@ -1,0 +1,14 @@
+﻿@model MyTrailer.ViewModels.BookingViewModel
+
+<h2>Return Trailer - @Model.TrailerNumber</h2>
+
+<form asp-action="ReturnTrailer" method="post">
+    <input type="hidden" name="bookingId" value="@Model.Id" />
+
+    <div class="form-group">
+        <label for="actualReturnTime">Actual Return Time:</label>
+        <input type="datetime-local" id="actualReturnTime" name="actualReturnTime" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Return</button>
+</form>

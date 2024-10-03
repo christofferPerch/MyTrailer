@@ -74,5 +74,12 @@ namespace MyTrailer.Services
             var parameters = new { LocationId = locationId };
             return await _dataAccess.GetAll<Trailer>(sql, parameters);
         }
+
+        public async Task UpdateTrailerAvailability(int trailerId, bool isAvailable) {
+            var sql = @"UPDATE Trailer SET IsAvailable = @IsAvailable WHERE Id = @Id";
+            var parameters = new { Id = trailerId, IsAvailable = isAvailable };
+            await _dataAccess.Update(sql, parameters);
+        }
+
     }
 }

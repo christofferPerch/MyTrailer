@@ -2,25 +2,32 @@
 
 <h2>Available Trailers at @ViewBag.LocationName</h2>
 
-@if (!Model.Any())
-{
+@if (!Model.Any()) {
     <p>No trailers are available at this location right now.</p>
-}
-else
-{
+} else {
     <table class="table">
         <thead>
             <tr>
                 <th>Trailer Number</th>
                 <th>Availability</th>
+                <th>Actions</th> <!-- Added new column for the actions -->
             </tr>
         </thead>
         <tbody>
-            @foreach (var trailer in Model)
-            {
+            @foreach (var trailer in Model) {
                 <tr>
                     <td>@trailer.Number</td>
                     <td>@(trailer.IsAvailable ? "Available" : "Not Available")</td>
+                    <td>
+                        @if (trailer.IsAvailable) {
+                            <form asp-action="ConfirmBooking" method="get">
+                                <input type="hidden" name="trailerId" value="@trailer.Id" />
+                                <button type="submit" class="btn btn-primary">Book Now</button>
+                            </form>
+                        } else {
+                            <span>Not Available</span>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>

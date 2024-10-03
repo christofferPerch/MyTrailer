@@ -67,5 +67,16 @@ namespace MyTrailer.Services
             var parameters = new { Id = id };
             await _dataAccess.Delete(sql, parameters);
         }
+
+        public async Task ApplyLateFee(int customerId, decimal lateFee) {
+            // Assuming there is a Payment system to track fees
+            var payment = new Payment {
+                CustomerId = customerId,
+                Method = "Late Fee",
+                History = $"Late return fee of {lateFee:C} applied."
+            };
+
+            await _dataAccess.Insert("INSERT INTO Payment (CustomerId, Method, History) VALUES (@CustomerId, @Method, @History)", payment);
+        }
     }
 }

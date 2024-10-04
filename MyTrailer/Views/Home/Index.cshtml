@@ -2,7 +2,20 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="video-container">
+    <!-- Video Background -->
+    <video autoplay muted loop class="video-background">
+        <source src="~/videos/TrailerVideo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Overlay Content -->
+    <div class="overlay-content">
+        <h1>Welcome to MyTrailer Rentals</h1>
+        <p>Tired of dangerous trailers that might get you killed? Today is your lucky day.</p>
+        <p>Rent trailers with ease from nearby locations.</p>
+        <a href="@Url.Action("SelectLocation", "Trailer")" class="btn btn-primary">
+            Rent a Trailer
+        </a>
+    </div>
 </div>

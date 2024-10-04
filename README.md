@@ -32,6 +32,8 @@
   - `IsInsured`: Boolean indicating whether insurance was purchased.
   - `IsOverdue`: Boolean indicating if the trailer was returned late.
 
+We started out with the Customer entity, but as we started to code we decided to use the Asp Net Identity which basically holds the same user information as the Customer. 
+
 ## Value Objects
 
 - **PaymentDetails**
@@ -111,3 +113,52 @@
 - **Given** a trailer has been rented out,
 - **When** the trailer is returned,
 - **Then** the system should log the return time and calculate any late fees if applicable.
+
+
+
+
+# OLA 4 - Microservice Architecture for MyTrailer System
+
+For OLA 4, we started by building the system as a monolith to get a complete working application. Then, we created two separate Web API projects to show how we could transition to a microservice-based architecture. However, simply splitting it into microservices isn't practical without significant changes. Each microservice would need its own dedicated database, and we would have to redesign the system to ensure proper communication between services, handle data consistency, and implement distributed transactions. Next week, when we receive the exam project, we'll focus on building services from the ground up with this in mind.
+
+## 1. Booking Service
+**Responsibilities:** Manages trailer bookings and returns.  
+**Database:** A database specifically for storing booking information such as `Bookings`, `TrailerId`, `UserId`, `StartDateTime`, `EndDateTime`, `LateFees`, and `ActualReturnTime`.
+
+**Endpoints:**
+- `POST /bookings`: Create a booking.
+- `PUT /bookings/{id}`: Update or return a trailer.
+- `GET /bookings/user/{userId}`: Fetch all bookings for a user.
+
+## 2. Trailer Service
+**Responsibilities:** Manages trailer availability, location, and status.  
+**Database:** Stores information about `Trailers`, `LocationId`, `IsAvailable`, and `Number`.
+
+**Endpoints:**
+- `GET /trailers/{locationId}`: Get available trailers at a location.
+- `PUT /trailers/{id}`: Update trailer availability.
+
+## 3. Location Service
+**Responsibilities:** Manages trailer locations and partner information.  
+**Database:** Stores information about `Locations`, `PartnerCompanies`, and branding images.
+
+**Endpoints:**
+- `GET /locations`: Fetch all locations.
+- `GET /locations/{id}`: Fetch a specific location.
+
+## 4. User Service
+**Responsibilities:** Manages user authentication and roles using ASP.NET Identity.  
+**Database:** User management will be handled via the ASP.NET Identity tables. You wouldn't create a new database here but rely on the existing Identity schema.
+
+**Endpoints:**
+- `POST /users/register`: User registration.
+- `POST /users/login`: User login.
+
+## 5. Payment Service
+**Responsibilities:** Manages payments related to bookings (insurance or late fees).  
+**Database:** Stores payment-related data such as `Payments`, `BookingId`, `Amount`, and `PaymentMethod`.
+
+**Endpoints:**
+- `POST /payments`: Record a new payment.
+- `GET /payments/{bookingId}`: Fetch payment details for a booking.
+

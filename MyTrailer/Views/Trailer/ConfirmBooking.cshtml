@@ -1,0 +1,105 @@
+﻿@model MyTrailer.ViewModels.BookingViewModel
+
+<div class="booking-form-container">
+    <h2>Confirm Your Booking for Trailer @Model.TrailerNumber</h2>
+
+    <div class="branding">
+        @if (!string.IsNullOrEmpty(Model.BrandingImagePath))
+        {
+            <img src="@Url.Content(Model.BrandingImagePath)" alt="@Model.LocationName Branding" />
+        }
+        else
+        {
+            <p>No branding available for this location.</p>
+        }
+    </div>
+
+    <form asp-action="ConfirmBooking" method="post">
+        <input type="hidden" name="trailerId" value="@Model.TrailerId" />
+
+        <div class="form-group">
+            <label for="startDateTime">Start Date and Time:</label>
+            <input type="datetime-local" id="startDateTime" name="startDateTime" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="endDateTime">End Date and Time:</label>
+            <input type="datetime-local" id="endDateTime" name="endDateTime" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="isInsured">Insurance (50 Kr):</label>
+            <input type="checkbox" id="isInsured" name="isInsured" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Confirm Booking</button>
+    </form>
+</div>
+
+
+<style>
+    .booking-form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 2rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+        .booking-form-container h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .booking-form-container .branding img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-form-container .branding p {
+            color: #666;
+            font-style: italic;
+        }
+
+        .booking-form-container label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .booking-form-container .form-control {
+            padding: 0.7rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .booking-form-container .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 0.7rem 2rem;
+            font-size: 1.1rem;
+            width: 100%;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+            .booking-form-container .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .booking-form-container .form-group {
+            margin-bottom: 1.5rem;
+        }
+</style>

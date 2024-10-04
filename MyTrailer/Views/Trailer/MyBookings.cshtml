@@ -1,0 +1,33 @@
+﻿@model List<MyTrailer.ViewModels.BookingViewModel>
+
+<h2>Your Current Bookings</h2>
+
+@if (!Model.Any()) {
+    <p>You don't have any active bookings at the moment.</p>
+} else {
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Trailer Number</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var booking in Model) {
+                <tr>
+                    <td>@booking.TrailerNumber</td>
+                    <td>@booking.StartDateTime</td>
+                    <td>@booking.EndDateTime</td>
+                    <td>
+                        <form asp-action="ReturnTrailerForm" method="get">
+                            <input type="hidden" name="bookingId" value="@booking.Id" />
+                            <button type="submit" class="btn btn-warning">Return Trailer</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

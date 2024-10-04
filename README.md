@@ -121,6 +121,8 @@ We started out with the Customer entity, but as we started to code we decided to
 
 For OLA 4, we started by building the system as a monolith to get a complete working application. Then, we created two separate Web API projects to show how we could transition to a microservice-based architecture. However, simply splitting it into microservices isn't practical without significant changes. Each microservice would need its own dedicated database, and we would have to redesign the system to ensure proper communication between services, handle data consistency, and implement distributed transactions. Next week, when we receive the exam project, we'll focus on building services from the ground up with this in mind.
 
+![Trailer Rental System Microservices](./TrailerBookingSystem.png)
+
 ## 1. Booking Service
 **Responsibilities:** Manages trailer bookings and returns.  
 **Database:** A database specifically for storing booking information such as `Bookings`, `TrailerId`, `UserId`, `StartDateTime`, `EndDateTime`, `LateFees`, and `ActualReturnTime`.

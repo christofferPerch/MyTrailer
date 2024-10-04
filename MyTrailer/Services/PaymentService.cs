@@ -30,13 +30,13 @@ namespace MyTrailer.Services
 
         public async Task<int> AddPayment(Payment payment)
         {
-            var sql = @"INSERT INTO Payment (CustomerId, Method, History)
+            var sql = @"INSERT INTO Payment (UserId, Method, History)
                         OUTPUT INSERTED.Id
-                        VALUES (@CustomerId, @Method, @History)";
+                        VALUES (@UserId, @Method, @History)";
 
             var parameters = new
             {
-                payment.CustomerId,
+                payment.UserId,
                 payment.Method,
                 payment.History
             };
@@ -47,12 +47,12 @@ namespace MyTrailer.Services
         public async Task UpdatePayment(Payment payment)
         {
             var sql = @"UPDATE Payment
-                        SET CustomerId = @CustomerId, Method = @Method, History = @History
+                        SET UserId = @UserId, Method = @Method, History = @History
                         WHERE Id = @Id";
 
             var parameters = new
             {
-                payment.CustomerId,
+                payment.UserId,
                 payment.Method,
                 payment.History,
                 payment.Id

@@ -1,16 +1,31 @@
 ﻿@model List<MyTrailer.Models.Location>
 
-<h2>Select a Location</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Select a Location</h2>
 
-<form asp-action="Index" method="get">
-    <div class="form-group">
-        <label for="location">Choose a Location:</label>
-        <select name="locationId" class="form-control" id="location">
-            @foreach (var location in Model)
-            {
-                <option value="@location.Id">@location.LocationName</option>
-            }
-        </select>
+                    <form asp-action="Index" method="get">
+                        <div class="form-group mb-4">
+                            <label for="location" class="form-label">Choose a Location:</label>
+                            <select name="locationId" class="form-control form-select-lg" id="location">
+                                <option value="" disabled selected>Select a location</option>
+                                @foreach (var location in Model)
+                                {
+                                    <option value="@location.Id">@location.LocationName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary">View Available Trailers</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">View Available Trailers</button>
-</form>
+</div>
+
+
